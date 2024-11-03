@@ -1,0 +1,102 @@
+{% extends 'manage/base/base.html' %}
+{% load my_tags %}
+{% block content %}
+<div class="row mt-4">
+    <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-light">
+                        订单信息({{ len }})
+                        <div class="w3l_search float-right">
+                            <form action="/orderALL" method="get">
+                                <input type="search" name="Search" style="Float:left;height:35px;font-size: 16px" placeholder="订单编号/商品名称">
+                                <button type="submit" class="btn btn-primary" style="Float:left;height:35px" aria-label="Left Align">
+                                    <i class="fa fa-search" aria-hidden="true"> </i>
+                                </button>
+                                <div class="clearfix"></div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>订单编号</th>
+                                    <th>商品名称</th>
+                                    <th>金额</th>
+                                    <th>支付状态</th>
+                                    <th>收货状态</th>
+                                    <th>创建订单时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody style="height: 300px;overflow-y: auto">
+                                {% for dl in page_list %}
+                                <tr>
+                                    <td>{{ dl.out_trade_no }}</td>
+                                    <td>{{ dl.goods_name }}</td>
+                                    <td>￥{{ dl.amount}}</td>
+                                    <td>
+                                    {% if dl.order_status == 0 %}
+                                        待支付
+                                    {% elif dl.order_status == 1 %}
+                                        支付成功
+                                    {% elif dl.order_status == 2 %}
+                                        支付失败
+                                    {% endif%}
+                                    </td>
+                                    <td>
+                                        {% if dl.delivery_status == 0 %}
+                                            待发货
+                                        {% elif dl.delivery_status == 1 %}
+                                            已发货
+                                        {% elif dl.delivery_status == 2 %}
+                                            已收货
+                                        {% endif%}
+                                        </td>
+                                    <td>{{ dl.create_datetime }}</td>
+                                    <td>
+                                        {% if dl.order_status != 1 %}
+                                        <button type="button" class="btn btn-outline-primary" onclick="orderPay(`{{dl.out_trade_no}}`,{{dl.goods_id}})" value="支付">支付</button>
+                                        {% endif %}
+                                        {% if dl.delivery_status == 0 %}
+                                        <button type="button" class="btn btn-outline-primary" onclick="updatedOrder(`{{dl.id}}`,1)" value="支付">发货</button>
+                                        {% endif %}
+                                        <button type="button" class="btn btn-outline-primary" onclick="delOrder({{dl.id}})" >删除</button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+
+                            <!-- 页码选择菜单 -->
+                            <nav class="numbering">
+                                    <ul class="pagination paging">
+                                    {#如果有上一页#}
+                                    {% if page_list.has_previous %}
+                                        <li class="previous"><a href="{% if flag == 1 %}?p_id={{ p_id }}&{% else %}?{% endif %}page={{ page_list.previous_page_number }}"  class="btn btn-outline-primary btn-rounded">«</a></li>
+                                    {% endif %}
+
+                                    {#输出页码#}
+                                    {% for num in paginator.page_range %}
+                                        {% if num == current_page %}
+                                            <li class="item active"><a class="btn btn-primary btn-rounded" href="{% if flag == 1 %}?p_id={{ p_id }}&{% else %}?{% endif %}page={{ num }}">{{ num }}</a></li>
+                                        {% else %}
+                                            <li class="item"><a  class="btn btn-outline-primary btn-rounded" href="{% if flag == 1 %}?p_id={{ p_id }}&{% else %}?{% endif %}page={{ num }}">{{ num }}</a></li>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {#如果有下一页#}
+                                    {% if page_list.has_next %}
+                                        <li class="next"><a class="btn btn-outline-primary btn-rounded" href="{% if flag == 1 %}?p_id={{ p_id }}&{% else %}?{% endif %}page={{ page_list.next_page_number }}">»</a></li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                                <!-- //页码选择菜单 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+</div>
+{% endblock %}

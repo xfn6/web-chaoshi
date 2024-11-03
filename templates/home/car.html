@@ -1,0 +1,123 @@
+{% extends "home/index.html" %}
+{% load my_tags %}
+{% block title %}
+-
+购物车
+{% endblock %}
+
+{#可以作为子模板，给分类使用#}
+{#似乎……没必要，在视图返回不同的数据就行了#}
+{% block location %}
+    <div class="breadcrumbs">
+		<div class="container">
+			<ol class="breadcrumb breadcrumb1 animated wow slideInLeft" data-wow-delay=".5s">
+				<li><a href="{% url 'index' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>首页</a></li>
+				<li class="active">
+                    {% block loc %}
+                        购物车
+                    {% endblock loc %}
+                </li>
+			</ol>
+		</div>
+	</div>
+{% endblock location%}
+{% block main %}
+    <div class="products">
+		<div class="container">
+			    <div class="col-md-12 products-right">
+
+
+{% block d_list %}
+<div class="row mt-4">
+    <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-light">
+                     购物车信息({{ len }})
+                        <div class="w3l_search float-right">
+                            <form action="/shopCar" method="get">
+                                <input type="search" name="Search" style="Float:left;height:35px;font-size: 16px" placeholder="商品名称">
+                                <button type="submit" class="btn btn-primary" style="Float:left;height:35px" aria-label="Left Align">
+                                    <i class="fa fa-search" aria-hidden="true"> </i>
+                                </button>
+                                <div class="clearfix"></div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>名称</th>
+                                    <th>图片</th>
+                                    <th>选购数量</th>
+                                    <th>金额</th>
+                                    <th>加入购物车时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody style="height: 300px;overflow-y: auto">
+                                {% for dl in page_list %}
+                                <tr>
+                                    <td>{{ dl.good.name }}</td>
+                                    <td>{{ dl.good.name }}</td>
+                                    <td>{{ dl.car.count }}</td>
+                                    <td>{{ dl.car.count }} * {{ dl.good.sale_price }}</td>
+                                    <td>{{ dl.car.create_datetime }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-primary" onclick="carPay(this,{{dl.car.id}},{{dl.good.id}},{{dl.car.count}},{{dl.good.sale_price}})" value="支付">支付</button>
+                                        <button type="button" class="btn btn-outline-primary" onclick="delShopCar({{dl.car.id}})">删除</button>
+
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+
+                            <!-- 页码选择菜单 -->
+                            <nav class="numbering">
+                                    <ul class="pagination paging">
+                                    {#如果有上一页#}
+                                    {% if page_list.has_previous %}
+                                        <li class="previous"><a href="{% if flag == 1 %}?p_id={{ p_id }}&{% else %}?{% endif %}page={{ page_list.previous_page_number }}"  class="btn btn-outline-primary btn-rounded">«</a></li>
+                                    {% endif %}
+
+                                    {#输出页码#}
+                                    {% for num in paginator.page_range %}
+                                        {% if num == current_page %}
+                                            <li class="item active"><a class="btn btn-primary btn-rounded" href="{% if flag == 1 %}?p_id={{ p_id }}&{% else %}?{% endif %}page={{ num }}">{{ num }}</a></li>
+                                        {% else %}
+                                            <li class="item"><a  class="btn btn-outline-primary btn-rounded" href="{% if flag == 1 %}?p_id={{ p_id }}&{% else %}?{% endif %}page={{ num }}">{{ num }}</a></li>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {#如果有下一页#}
+                                    {% if page_list.has_next %}
+                                        <li class="next"><a class="btn btn-outline-primary btn-rounded" href="{% if flag == 1 %}?p_id={{ p_id }}&{% else %}?{% endif %}page={{ page_list.next_page_number }}">»</a></li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                                <!-- //页码选择菜单 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+</div>
+{% endblock d_list%}
+			</div>
+			<div class="clearfix"> </div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        //(function () {
+//
+        //    function order(obj) {
+        //        console.log($(obj).val())
+        //   }
+        //});
+    </script>
+{% endblock %}

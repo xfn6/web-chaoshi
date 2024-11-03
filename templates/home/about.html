@@ -1,0 +1,106 @@
+{% extends "home/all.html" %}
+
+{% block title %}
+-关于
+{% endblock %}
+
+{% block loc %}
+        关于
+{% endblock loc %}
+{% block main %}
+
+	<!-- about-slid -->
+	<div class="about-slid agileits-w3layouts">
+		<div class="container">
+			<div class="about-slid-info">
+				<h2>优选百货，品质生活</h2>
+				<p>每天都会进行一次上架商品的检查，每周都会进行一次库存货物的更新，保证您的购物品质和体验</p>
+			</div>
+		</div>
+	</div>
+	<!-- //about-slid -->
+
+<!-- about -->
+	<div class="about">
+		<div class="container">
+			<h3 class="w3_agile_header">ABOUT</h3>
+			<div class="about-agileinfo w3layouts">
+				<div class="col-md-8 about-wthree-grids grid-top">
+					<h4>超市在线销售及分析系统：</h4>
+                    <p>您的反馈是我们进步的动力，我们非常感谢您对我们产品的建议和意见。我们会认真听取您的声音，不断改进我们的产品和服务，为您提供更好的使用体验。
+                        非常感谢您的肯定，我们感到非常荣幸。您的反馈是对我们工作的最好鼓励，我们会继续保持高标准的服务质量。如果您有任何其他建议或意见，欢迎随时告诉我们。
+                    </p>
+                    <div class="about-w3agilerow">
+						<div class="about-slid agileits-w3layouts">
+                    </div>
+						<div class="clearfix"> </div>
+					</div>
+                    <br>
+					<h4>Supermarket online sales and analysis system：</h4>
+                    <p>Your feedback is the driving force behind our progress, and we greatly appreciate your suggestions and opinions on our products. 
+                        We will carefully listen to your voice, continuously improve our products and services, and provide you with a better user experience.
+                        Thank you very much for your affirmation. 
+                        We feel very honored. Your feedback is the best encouragement for our work, and we will continue to maintain high standards of service quality. 
+                        If you have any other suggestions or opinions, please feel free to let us know at any time.
+                    </p>
+				</div>
+				<div class="col-md-4 about-wthree-grids">
+					<div class="offic-time">
+						<div class="time-top">
+							<h4>平台商品说明：</h4>
+						</div>
+						<div class="time-bottom">
+							<h5>来自  ——  合法知名供应商</h5>
+							<p>www.baidu.com </p>
+						</div>
+					</div>
+                    <!--最近评价-->
+					<div class="testi">
+						<a href="/feedback"> <h3 class="w3_agile_header">反馈 &amp; 评价</h3></a>
+						<!--//End-slider-script -->
+						<script src="../../../static/home/js/responsiveslides.min.js"></script>
+						 <script>
+							// You can also use "$(window).load(function() {"
+							$(function () {
+							  // Slideshow 5
+							  $("#slider5").responsiveSlides({
+								auto: true,
+								pager: false,
+								nav: true,
+								speed: 500,
+								namespace: "callbacks",
+								before: function () {
+								  $('.events').append("<li>before event fired.</li>");
+								},
+								after: function () {
+								  $('.events').append("<li>after event fired.</li>");
+								}
+							  });
+
+							});
+						  </script>
+						<div  id="top" class="callbacks_container">
+							<ul class="rslides" id="slider5">
+                                {% for m in message %}
+                                <li>
+									<div class="testi-slider">
+										<h4>" {{ m.content }} "</h4>
+{#										<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eu magna dolor, quisque semper.</p>#}
+										<div class="testi-subscript">
+											<p><a>{{ m.name }}</a></p>
+											<span class="w3-agilesub"> </span>
+										</div>
+									</div>
+								</li>
+                                {% endfor %}
+							</ul>
+						</div>
+					</div>
+                    <!--//最近评价-->
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+		</div>
+	</div>
+	<!-- //about -->
+{% endblock %}

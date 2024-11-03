@@ -1,0 +1,206 @@
+{% extends "home/index.html" %}
+{% load my_tags %}
+{% block title %}
+-数据可视化
+{% endblock %}
+
+{% block main %}
+    <div class="products">
+		<div class="container">
+			    <div class="col-md-12 products-right">
+
+
+<div class="row mt-4">
+    <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="">
+                            <table border="1" class="table table-hover">
+                                <thead>
+                                <tr style="background: #129F3D">
+                                    <th>类别</th>
+                                    <th>食品名称</th>
+                                    <th>销量</th>
+                                    <th>销售额</th>
+                                </tr>
+                                </thead>
+                                <tbody  style="max-height: 300px;overflow-y: auto">
+                                {% for dl in t_list %}
+                                <tr  {% if forloop.counter|divisibleby:"2" %}style="background: #E9EEEB;height: 24px;"{% else %}style="background: #FFFFFF;height: 24px;"{% endif %}>
+                                    <td>{{ dl.category|get_simple_sort }}</td>
+                                    <td>{{ dl.name }}</td>
+                                    <td>{{ dl.volume }}</td>
+
+                                    <td>￥{{ dl.money}}</td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body" data-labels="{{json_type_label}}">
+                        <canvas id="chart-pie-v" width="300" height="249" class="chartjs-render-monitor" style="display: block; width: 1246px; height: 249px;"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <canvas id="chart-bar-v" width="300" height="249" class="chartjs-render-monitor" style="display: block; width: 1246px; height: 249px;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <canvas id="chart-line-v" width="300" height="249" class="chartjs-render-monitor" style="display: block; width: 1246px; height: 249px;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+            
+            </div>
+                
+            </div>
+
+</div>
+</div>
+<div class="clearfix"> </div>
+</div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="https://cdn.staticfile.net/Chart.js/3.9.1/chart.js"></script>
+<script>
+    $(document).ready(function(){
+
+        const pieChart = () => {
+            const mapT = {
+                "0": "零食饮料",
+                "1": "生鲜果蔬",
+                "2": "粮油副食",
+                "3": "清洁用品",
+                "4": "家居家电",
+            }
+            var lineChart = $('canvas[id="chart-pie-v"]');
+            let labels = lineChart.parent().attr('data-labels');
+            labels = JSON.parse(labels).labels
+            labels = labels.map(item => {
+                return mapT[item]
+            })
+            if (lineChart.length > 0) {
+                new Chart(lineChart, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: {{ t_type_list }},
+                            label: '饼图实例',
+                            backgroundColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(54, 162, 235)',
+                            'rgb(91, 241, 158)',
+                                'rgb(102, 141, 244)',
+                                'rgb(160, 102, 244)',
+                            ],
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true, // 设置图表为响应式，根据屏幕窗口变化而变化
+                        maintainAspectRatio: false,// 保持图表原有比例
+                        scales: {}
+                        
+                    }
+                });
+            }
+        }
+        const barChart = () => {
+            const mapT = {
+                "0": "零食饮料",
+                "1": "生鲜果蔬",
+                "2": "粮油副食",
+                "3": "清洁用品",
+                "4": "家居家电",
+            }
+            var barChart = $('canvas[id="chart-bar-v"]');
+            if (barChart.length > 0) {
+                let v_data = {{volume_list_data |safe}}
+                let labels = v_data.map(item => item.name)
+                let data = v_data.map(item => item.money)
+                new Chart(barChart, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            label: '柱状图各类商品销售量',
+                            backgroundColor: [
+                            'rgb(54, 162, 235)','rgb(255, 99, 132)', 'rgb(91, 241, 158)', 'rgb(102, 141, 244)', 'rgb(160, 102, 244)',
+                            ],
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true, // 设置图表为响应式，根据屏幕窗口变化而变化
+                        maintainAspectRatio: false,// 保持图表原有比例
+                        scales: {}
+                        
+                    }
+                });
+            }
+        }
+        const lineChart = () => {
+            const mapT = {
+                "0": "零食饮料",
+                "1": "生鲜果蔬",
+                "2": "粮油副食",
+                "3": "清洁用品",
+                "4": "家居家电",
+            }
+            var lineChart = $('canvas[id="chart-line-v"]');
+            if (lineChart.length > 0) {
+                let v_data = {{volume_list_data |safe}}
+                let labels = v_data.map(item => item.name)
+                let data = v_data.map(item => item.money)
+                new Chart(lineChart, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            label: '各类商品销售趋势',
+                            backgroundColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(54, 162, 235)',
+                            'rgb(255, 205, 86)'
+                            ],
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true, // 设置图表为响应式，根据屏幕窗口变化而变化
+                        maintainAspectRatio: false,// 保持图表原有比例
+                        scales: {}
+                        
+                    }
+                });
+            }
+        }
+        pieChart()
+        barChart()
+        lineChart()
+    });
+
+    </script>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "home/all.html" %}
+
+{% block title %}
+个人信息
+{% endblock title%}
+
+{% block loc %}
+个人信息
+{% endblock loc %}
+
+{% block main %}
+<!-- //breadcrumbs -->
+    <div class="container-personal">
+        <div class="personalMsg">
+            <div><img src="../../../static/manage/demo/imgs/user.png"></div><br>
+            <div><span>姓名： {{ request.session.nick_name }}</span></div><br>
+            <div><span>账号： {{ request.session.username }}</span></div><br>
+            <div><span>年龄： {{ request.session.age }}</span></div><br>
+            <div><span>性别： {{ request.session.sex }}</span></div><br>
+            <div><span>余额： {{ request.session.account }}</span></div>
+        </div>
+    </div>
+    <style type="text/css">
+    .container-personal{
+        width: 100%;
+        height: 500px;
+        {#background-color: #00e58b;#}
+        position: relative;
+    }
+    .container-personal .personalMsg{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        {#background-color: #0c87eb;#}
+        height: 100%;
+        width: 15%;
+        margin-top: 20px;
+    }
+    .container-personal .personalMsg div span{
+        font-size: 30px;
+        text-align: center;
+    }
+    </style>
+{% endblock main%}
+
+

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    {% load staticfiles %}
+    <style>
+        body {
+            background: url('../../static/common/images/bg.jpg') no-repeat;
+            background-size: 100% 135%;
+        }
+ 
+        #login_box {
+            width: 20%;
+            height: 400px;
+            background-color: rgba(0, 0, 0, 0.36);
+            margin: auto;
+            margin-top: 10%;
+            text-align: center;
+            border-radius: 10px;
+            padding: 50px 50px;
+        }
+ 
+        h2 {
+            color: rgba(255, 255, 255, 0.55);
+            margin-top: 5%;
+        }
+ 
+        span {
+            color: rgb(83, 83, 83);
+        }
+ 
+        input {
+            border: 0;
+            width: 70%;
+            font-size: 20px;
+            color: #646708;
+            {#background: transparent;#}
+            {#border-bottom: 2px solid rgba(128, 32, 10, 0.65);#}
+            padding: 8px 16px;
+            outline: none;
+            margin-top: 10px;
+        }
+        
+ 
+        button {
+            margin-top: 40px;
+            width: 50%;
+            height: 30px;
+            border-radius: 10px;
+            border: 0;
+            color: #d05530;
+            text-align: center;
+            line-height: 30px;
+            font-size: 15px;
+            background-image: linear-gradient(to right, rgb(147, 70, 185), #a0f1ea);
+        }
+ 
+        li {
+            margin-top: 16px;
+            color: #46acb9;
+        }
+ 
+        a {
+            margin-top: 10px;
+            color: #467cb9;
+        }
+    </style>
+</head>
+ 
+<body>
+<div id="login_box">
+    <h2>客户端登录</h2>
+    <form class="user" action="/loginUsers/" method="post">
+        {%  csrf_token %}
+        <div id="input_box">
+            <input type="text" name="username" placeholder="请输入用户名" id="username" style="border-radius: 10px;">
+        </div>
+        <div class="input_box">
+            <input type="password" name="password" placeholder="请输入密码" id="password" style="border-radius: 10px;">
+        </div>
+        <button onclick="login()" style="cursor: pointer">登录</button>
+    </form>
+    
+    <table>
+        <tr>
+            <td style="width:200%;height:14px;font-size:14px;border:0">
+            </td>
+        </tr>
+    </table>
+    <li>没有帐户?
+        <a href="/indexTest1/">点击注册</a>
+    </li>
+</div>
+<script src="../../../static/manage/demo/vendor/jquery/jquery.min.js"></script>
+<script src="../../../static/manage/js/jquery.form.js"></script>
+<script>
+    function login() {
+        // 获取用户名和密码输入框的值
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        var log = ""
+        // 简单的验证示例：检查用户名和密码是否为空
+        if (username === "" || password === "") {
+            log = "请输入用户名和密码"
+        }else{
+            log = "登录失败！账号或者密码错误"
+        }
+        // 在实际应用中，这里可以通过 AJAX 请求将用户名和密码发送到服务器进行验证
+        // 这里只是一个简单的示例，实际应用中需要更安全的验证机制
+        $(".user").ajaxForm(function(data){
+            if(data==="ok"){
+                alert("登录成功！欢迎，" + username + "！");
+                window.location.href='/index'
+            }
+            else {
+                alert(log);
+            }
+        });
+    }
+</script>
+</body>
+</html>

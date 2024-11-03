@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册</title>
+    {% load staticfiles %}
+    <style>
+        body {
+            background: url('../../static/common/images/bg.jpg') no-repeat;
+            background-size: 100% 135%;
+        }
+ 
+        #login_box {
+            width: 20%;
+            height: 400px;
+            background-color: rgba(0, 0, 0, 0.36);
+            margin: auto;
+            margin-top: 10%;
+            text-align: center;
+            border-radius: 10px;
+            padding: 50px 50px;
+        }
+ 
+        h2 {
+            color: rgba(255, 255, 255, 0.55);
+            margin-top: 5%;
+        }
+ 
+        span {
+            color: rgb(83, 83, 83);
+        }
+ 
+        input {
+            border: 0;
+            width: 70%;
+            font-size: 20px;
+            color: #646708;
+            {#background: transparent;#}
+            {#border-bottom: 2px solid rgba(128, 32, 10, 0.65);#}
+            padding: 8px 16px;
+            outline: none;
+            margin-top: 10px;
+        }
+        
+ 
+        button {
+            margin-top: 40px;
+            width: 50%;
+            height: 30px;
+            border-radius: 10px;
+            border: 0;
+            color: #d05530;
+            text-align: center;
+            line-height: 30px;
+            font-size: 15px;
+            background-image: linear-gradient(to right, rgb(147, 70, 185), #a0f1ea);
+        }
+ 
+        li {
+            margin-top: 16px;
+            color: #46acb9;
+        }
+ 
+        a {
+            margin-top: 10px;
+            color: #467cb9;
+        }
+    </style>
+</head>
+ 
+<body>
+<div id="login_box">
+    <h2>客户端注册</h2>
+    <form class="user" action="/registerUsers/" method="post">
+        {%  csrf_token %}
+        <div id="input_box">
+            <input type="text" name="username" placeholder="请输入用户名" id="username" style="border-radius: 10px;">
+        </div>
+        <div class="input_box">
+            <input type="text" name="password" placeholder="请输入密码" id="password" style="border-radius: 10px;">
+        </div>
+        <div class="input_box">
+            <input type="text" name="nick_name" placeholder="请输入昵称" id="nick_name" style="border-radius: 10px;">
+        </div>
+        <div class="input_box">
+            <input type="text" name="age" placeholder="请输入年龄" id="age" style="border-radius: 10px;">
+        </div>
+        <div class="input_box">
+            <input type="text" name="sex" placeholder="请输入性别" id="sex" style="border-radius: 10px;">
+        </div>
+        <button onclick="register()" style="cursor: pointer">注册</button>
+    </form>
+    
+    <table>
+        <tr>
+            <td style="width:200%;height:14px;font-size:14px;border:0">
+            </td>
+        </tr>
+    </table>
+    <li>已有帐户?
+        <a href="/">点击登录</a>
+    </li>
+</div>
+<script src="../../../static/manage/demo/vendor/jquery/jquery.min.js"></script>
+<script src="../../../static/manage/js/jquery.form.js"></script>
+<script>
+    function register() {
+        // 获取用户名和密码输入框的值
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        var nick_name = document.getElementById("nick_name").value;
+        var age = document.getElementById("age").value;
+        var sex = document.getElementById("sex").value;
+        var log = ""
+        // 简单的验证示例：检查用户名和密码是否为空
+        if (username === "" || password === "" || nick_name === "" || age === "" || sex === "") {
+            log = "请输入完整的信息"
+        }else{
+            log = "注册失败！请联系管理员"
+        }
+        // 在实际应用中，这里可以通过 AJAX 请求将用户名和密码发送到服务器进行验证
+        // 这里只是一个简单的示例，实际应用中需要更安全的验证机制
+        $(".user").ajaxForm(function(data){
+            if(data==="ok"){
+                alert("注册成功！欢迎，" + nick_name + "使用本系统！");
+                window.location.href='/'
+            }
+            else {
+                alert(log);
+            }
+        });
+    }
+</script>
+</body>
+</html>
